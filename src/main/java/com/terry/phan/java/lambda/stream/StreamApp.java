@@ -1,6 +1,7 @@
 package com.terry.phan.java.lambda.stream;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -11,7 +12,6 @@ import java.util.stream.Stream;
 public class StreamApp {
 
     private static Function<Map.Entry<String, List<String>>, Stream<? extends String>> streamFunction;
-
     public static void main(String... args) {
         List<String> list = List.of("1", "1", "2", "3", "4", "5");
 
@@ -34,8 +34,9 @@ public class StreamApp {
         System.out.printf("Testing stream and flatmap, collect all distinct elements: %s \n", mappedOutput);
 
 
+        Function<Integer, Integer> toUniqueKeyFunction = t -> t.intValue() % 2 == 0 ? 2 : 1;
         Map<Integer, List<Integer>> groupedMap =  list.stream().map(Integer::valueOf)
-                .collect(Collectors.groupingBy(t -> t.intValue() % 2 == 0 ? 2 : 1, Collectors.toList()));
+                .collect(Collectors.groupingBy(toUniqueKeyFunction, HashMap::new, Collectors.toList()));
 
         System.out.printf("Testing collectors and groupingBy, group odd and even: %s\n", groupedMap);
     }
